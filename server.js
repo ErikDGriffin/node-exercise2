@@ -1,16 +1,18 @@
 import express from "express";
-import config from "./config";
-// TODO: import router from routes/
+import config from "./config"; 
+import apiRouter from "./routes"; 
+import morgan from "morgan";
 
 const app = express();
 
 app.use(express.json());
+app.use(morgan("dev"));
 
-// TODO: use the imported router to handle all requests
+app.use("/api", apiRouter); 
 
 app.use((err, req, res, next) => {
   console.error(err);
-  res.json({ name: err.name, msg: err.message });
+  res.status(500).json({ error: "Internal Server Error" });
 });
 
 app.listen(config.port, () => {
