@@ -6,15 +6,14 @@ const router = express.Router();
 router.get("/:id?", async (req, res, next) => {
     try {
         const { id } = req.params;
-        let data;
 
         if (id) {
-            data = await db.getOne(id);
+            const data = await db.getOne(id);
+            res.json(data);
         } else {
-            data = await db.getAll();
+            const data = await db.getAll();
+            res.json(data);
         }
-
-        res.json(data);
     } catch (err) {
         next(err);
     }
@@ -22,10 +21,9 @@ router.get("/:id?", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
     try {
-        let newUser = req.body;
-        let data = await db.add(newUser);
-        res.json(data);
-       
+        const newUser = req.body;
+        const data = await db.add(newUser);
+        res.status(201).json(data); 
     } catch (err) {
         next(err);
     }
@@ -33,10 +31,10 @@ router.post("/", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
     try {
-       let {id} = req.params;
-       let updatedUser = req.body;
-       let data = await db.update(id, updatedUser);
-       res.json(data);
+        const { id } = req.params;
+        const updatedUser = req.body;
+        const data = await db.update(id, updatedUser);
+        res.json(data);
     } catch (err) {
         next(err);
     }
@@ -44,12 +42,13 @@ router.put("/:id", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
     try {
-       let { id } = req.params;
-       let data = await db.remove(id);
-       res.json(data);
+        const { id } = req.params;
+        const data = await db.remove(id);
+        res.json(data);
     } catch (err) {
         next(err);
     }
 });
 
 export default router;
+
